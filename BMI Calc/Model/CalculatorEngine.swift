@@ -5,19 +5,35 @@
 //  Created by Beavean on 06.07.2022.
 //
 
-import Foundation
+import UIKit
 
 struct CalculatorEngine {
     
-    var bmi: Float = 0.0
+    var bmi: BMI?
     
     func getBMIValue() -> String {
-        let bmiToOneDecimal = String(format: "%1f", bmi)
+        let bmiToOneDecimal = String(format: "%.1f", bmi?.value ?? 0.0)
         return bmiToOneDecimal
     }
     
+    func getAdvice() -> String {
+        return bmi?.advice ?? "No advice"
+    }
+    
+    func getColor() -> UIColor {
+        return bmi?.color ?? UIColor.white
+    }
+    
     mutating func calculateBMI(height: Float, weight: Float) {
-        bmi = weight / pow(height, 2)
+        let bmiValue = weight / pow(height, 2)
+        
+        if bmiValue < 18.5 {
+            bmi  = BMI(value: bmiValue, advice: "You are underweight", color: .blue )
+        } else if bmiValue < 24.9 {
+            bmi  = BMI(value: bmiValue, advice: "You are fit", color: .green )
+        } else {
+            bmi  = BMI(value: bmiValue, advice: "You are overweight", color: .orange )
+        }
     }
     
 }
